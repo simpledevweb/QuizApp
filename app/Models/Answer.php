@@ -16,6 +16,7 @@ class Answer extends Model
     {
         return $this->hasMany(Result::class);
     }
+    public $timestamps = false;
     protected $fillable = [
         'question_id',
         'answer',
