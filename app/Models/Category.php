@@ -10,6 +10,7 @@ class Category extends Model
 {
     use HasFactory;
     //softddeletes  
+     //relationships
     use SoftDeletes;
     public function collections()
     {

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Collection extends Model
 {
     use HasFactory;
+     //relationships
     public function user()
     {
         return $this->belongsTo(User::class);
