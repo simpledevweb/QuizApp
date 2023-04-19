@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +28,4 @@ Route::prefix('/category')
         Route::get('/showbyid/{id}', [CategoryController::class, 'show']);
         Route::delete('/delete/{id}', [CategoryController::class,'destroy']); 
     });
+Route::post('/user/register',[UserController::class,'register']);

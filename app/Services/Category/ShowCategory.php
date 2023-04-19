@@ -13,7 +13,7 @@ class ShowCategory extends BasicService
         ];
     }
 
-    public function execute(array $data)
+    public function execute(array $data):Category
     {
         $this->validate($data,$this->rules());
         //softddeletes  
