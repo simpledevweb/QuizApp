@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
     use HasFactory;
+    //softddeletes  
     use SoftDeletes;
     public function collections()
     {

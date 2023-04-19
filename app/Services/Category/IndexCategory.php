@@ -15,6 +15,7 @@ class IndexCategory  extends BasicService
     public function execute():Collection
     {
         //all(['id','name','created_at','updated_at'])
+        //softddeletes  
         return Category::withTrashed()->get();
     }
 }

@@ -16,6 +16,7 @@ class ShowCategory extends BasicService
     public function execute(array $data)
     {
         $this->validate($data,$this->rules());
+        //softddeletes  
         return Category::where('id',$data['id'])->withTrashed()->first();
     }
 }
