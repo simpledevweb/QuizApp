@@ -9,6 +9,7 @@ use App\Services\Category\IndexCategory;
 use App\Services\Category\ShowCategory;
 use App\Services\Category\StoreCategory;
 use App\Services\Category\UpdateCategory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -30,12 +31,10 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function create()
-    // {
-
-    // }
 
     /**
+     * 
+     * 
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -64,7 +63,11 @@ class CategoryController extends Controller
                 'id' => $id
             ]);
             return new CategoryResource($category);
-        } catch (ValidationException $exception) {
+        } catch (ModelNotFoundException) {
+            return response([
+                'errors' => 'Category not found'
+            ], 404);
+        }catch (ValidationException $exception) {
             return response([
                 'errors' => $exception->validator->errors()->all(),
             ], 422);
@@ -77,9 +80,6 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
-    {
-    }
 
     /**
      * Update the specified resource in storage.

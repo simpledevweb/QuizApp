@@ -19,7 +19,10 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-//prefix islew kk, collection ham resource api ham namespace uyreniw
+
+Route::post('/singup',[UserController::class,'register']);
+Route::post('/singin',[UserController::class,'singIn']);
+Route::get('/user/getme',[UserController::class,'show'])->middleware(['auth:sanctum', 'abilities:admin']);
 Route::prefix('/category')
     ->group(function () {
         Route::get('/showall', [CategoryController::class, 'index']);
@@ -28,4 +31,3 @@ Route::prefix('/category')
         Route::get('/showbyid/{id}', [CategoryController::class, 'show']);
         Route::delete('/delete/{id}', [CategoryController::class,'destroy']); 
     });
-Route::post('/user/register',[UserController::class,'register']);

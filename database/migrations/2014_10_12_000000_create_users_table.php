@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',32);
             $table->string('phone',13)->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('password');
             $table->boolean('is_premium')->default(false);
             $table->boolean('is_admin')->default(false);
