@@ -19,10 +19,11 @@ class UpdateCategory extends BasicService
 
     public function execute(array $data)
     {
-        $this->validate($data, $this->rules());
-        return Category::find($data['id'])->update([
+        $this->validate($data);
+        Category::find($data['id'])->update([
             'name'=>$data['name']
         ]);
+        return true;
     }
 }
 

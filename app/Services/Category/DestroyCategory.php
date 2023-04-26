@@ -15,7 +15,7 @@ class DestroyCategory extends BasicService
 
     public function execute(array $data):bool
     {
-        $this->validate($data,$this->rules());
+        $this->validate($data);
         $category=Category::find($data['id']);
         $category->delete();
         return true;

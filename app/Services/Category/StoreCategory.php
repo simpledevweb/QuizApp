@@ -17,7 +17,7 @@ class StoreCategory extends BasicService
 
     public function execute(array $data): Category
     {
-        $this->validate($data,$this->rules());
+        $this->validate($data);
         
         return Category::create($data);
     }

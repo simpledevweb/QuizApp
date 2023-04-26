@@ -18,7 +18,7 @@ class UserLogin extends BasicService
 
     public function execute(array $data)
     {
-        $this->validate($data,$this->rules());
+        $this->validate($data);
         $user=User::where('phone',$data['phone'])->first();
         if(!$user or !Hash::check($data['password'], $user->password)){
             throw new \Exception("User not found or password incorrect", 401);

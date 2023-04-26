@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('code',32)->unique();
             $table->enum('allowed_type',['public','url','limited users']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

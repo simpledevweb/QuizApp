@@ -18,7 +18,7 @@ class UserRegister extends BasicService
 
     public function execute(array $data): array
     {
-        $this->validate($data,$this->rules());
+        $this->validate($data);
         $user=User::create([
             'name'=>$data['name'],
             'phone'=>$data['phone'],

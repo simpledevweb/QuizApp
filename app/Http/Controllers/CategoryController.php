@@ -63,10 +63,6 @@ class CategoryController extends Controller
                 'id' => $id
             ]);
             return new CategoryResource($category);
-        } catch (ModelNotFoundException) {
-            return response([
-                'errors' => 'Category not found'
-            ], 404);
         }catch (ValidationException $exception) {
             return response([
                 'errors' => $exception->validator->errors()->all(),
@@ -91,7 +87,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $category = app(UpdateCategory::class)->execute([
+            app(UpdateCategory::class)->execute([
                 'name' => $request->name,
                 'id' => $id
             ]);
@@ -111,7 +107,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {   try {
-        $category = app(DestroyCategory::class)->execute([
+        app(DestroyCategory::class)->execute([
             'id' => $id
         ]);
         return response([
