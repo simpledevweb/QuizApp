@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('question');
             $table->bigInteger('correct_answers')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

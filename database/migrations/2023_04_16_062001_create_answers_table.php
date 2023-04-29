@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('question_id')->references('id')->on('questions');
             $table->string('answer',255);
             $table->boolean('is_correct');
+            $table->softDeletes();
         });
     }
 

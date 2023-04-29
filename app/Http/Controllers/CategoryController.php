@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CategoryResource;
-use App\Models\Category;
+use App\Http\Resources\Category\CategoryResource;
 use App\Services\Category\DestroyCategory;
 use App\Services\Category\IndexCategory;
 use App\Services\Category\ShowCategory;
 use App\Services\Category\StoreCategory;
 use App\Services\Category\UpdateCategory;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 

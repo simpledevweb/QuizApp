@@ -4,26 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Question extends Model
 {
     use HasFactory;
+    use SoftDeletes;
      //relationships
-    public function collection()
-    {
-        return $this->belongsTo(Collection::class);
-    }
-    public function answers()
-    {
-        return $this->hasMany(Answer::class);
-    }
-    public function results()
-    {
-        return $this->hasMany(Result::class);
-    }
-    protected $fillable = [
+     protected $fillable = [
         'collection_id',
         'question',
         'correct_answers',
     ];
+     public function answers():HasMany
+    {
+        return $this->hasMany(Answer::class);
+    }
+  
 }

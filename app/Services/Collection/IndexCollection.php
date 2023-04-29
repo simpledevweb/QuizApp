@@ -4,18 +4,23 @@ namespace App\Services\Collection;
 
 use App\Services\BasicService;
 use App\Models\Collection;
-use Illuminate\Database\Eloquent\Collection as Collect;
+use Illuminate\Support\Facades\Auth;
 
 class IndexCollection extends BasicService
 {
     public function rules(): array
     {
-        return [];
+        return [
+            'search'=>'nullable',
+        ];
     }
 
-    public function execute():Collect
+    public function execute(array $data)
     {
-        return Collection::all();
+        $this->validate($data);
+        return Collection::with('user')->when($data['search'] ?? null, function($query,$search){
+            $query->search($search);
+        })->paginate(15);
     }
 }
 ?>

@@ -3,6 +3,7 @@ namespace App\Services\Collection;
 
 use App\Models\Collection;
 use App\Services\BasicService;
+use Illuminate\Support\Facades\Auth;
 
 class ShowCollection extends BasicService
 {
@@ -16,7 +17,9 @@ class ShowCollection extends BasicService
     public function execute(array $data)
     {
         $this->validate($data);
-        return Collection::where('id',$data['id'])->withTrashed()->first();
+        $collection = Collection::find($data['id']);
+        $questions = $collection->questions;
+        return [$collection, $questions];
     }
 }
 

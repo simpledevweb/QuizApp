@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Category;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CollectionResource extends JsonResource
+class CategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -12,19 +12,13 @@ class CollectionResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request):array
     {
         return [
             'id'=>$this->id,
-            'category_id'=>$this->category_id,
-            'user_id'=>$this->user_id,
             'name'=>$this->name,
-            'description'=>$this->description,
-            'code'=>$this->code,
-            'allowed_type'=>$this->allowed_type,
             'created_at'=>$this->created_at?->format('Y-m-d H:i:s'),
             'updated_at'=>$this->updated_at?->format('Y-m-d H:i:s'),
-            'deleted_at'=>$this->deleted_at?->format('Y-m-d H:i:s')
         ];
     }
 }

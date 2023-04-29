@@ -2,27 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CollectionResource;
-use App\Services\Collection\DestroyCollection;
+use App\Http\Resources\Collection\CollectionCollection;
+use App\Http\Resources\Collection\CollectionResource;
+use App\Http\Resources\Collection\CollectionWithQuestionsResource;
+use App\Models\Collection;
 use App\Services\Collection\IndexCollection;
 use App\Services\Collection\ShowCollection;
 use App\Services\Collection\StoreCollection;
 use App\Services\Collection\UpdateCollection;
+use App\Services\Collection\DestroyCollection;
+use App\Traits\JsonRespondController;
+use Exception;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class CollectionController extends Controller
 {
+    use JsonRespondController;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request): JsonResponse|CollectionCollection
     {
-        $collections = app(IndexCollection::class)->execute();
-        return CollectionResource::collection($collections);
+        try {
+            $collections = app(IndexCollection::class)->execute($request->all());
+            return new CollectionCollection($collections);
+        } catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        } catch (Exception $exception) {
+            $code = is_string($exception->getCode()) ? 500 : $exception->getCode();
+            return $this->respondError($exception->getMessage(), [], $code);
+        }
     }
 
     /**
@@ -31,21 +46,16 @@ class CollectionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try {
-            $collection = app(StoreCollection::class)->execute([
-                'category_id' => $request->category_id,
-                'user_id' => $request->user_id,
-                'name' => $request->name,
-                'description' => $request->description,
-                'allowed_type' => $request->allowed_type,
-            ]);
-            return new CollectionResource($collection);
+            app(StoreCollection::class)->execute($request->all());
+            return $this->respondSuccess();
         } catch (ValidationException $exception) {
-            return response([
-                'errors' => $exception->validator->errors()->all(),
-            ], 422);
+            return $this->respondValidatorFailed($exception->validator);
+        }catch (Exception $exception) {
+            $code = is_string($exception->getCode()) ? 500 : $exception->getCode();
+            return $this->respondError($exception->getMessage(), [], $code);
         }
     }
 
@@ -58,14 +68,15 @@ class CollectionController extends Controller
     public function show($id)
     {
         try {
-            $collection = app(ShowCollection::class)->execute([
+            [$collection, $questions] = app(ShowCollection::class)->execute([
                 'id' => $id
             ]);
-            return new CollectionResource($collection);
+            return (new CollectionWithQuestionsResource($collection))->setQuestions($questions);
         } catch (ValidationException $exception) {
-            return response([
-                'errors' => $exception->validator->errors()->all()
-            ]);
+            return $this->respondValidatorFailed($exception->validator);
+        } catch (Exception $exception) {
+            $code = is_string($exception->getCode()) ? 500 : $exception->getCode();
+            return $this->respondError($exception->getMessage(), [], $code);
         }
     }
 
@@ -80,18 +91,17 @@ class CollectionController extends Controller
     {
         try {
             app(UpdateCollection::class)->execute([
-                'id'=>$id,
-                'category_id'=>$request->category_id,
-                'user_id'=>$request->user_id,
-                'name'=>$request->name,
-                'description'=>$request->description,
-                'allowed_type'=>$request->allowed_type
+                'id' => $id,
+                'category' => $request->category,
+                'name' => $request->name,
+                'description' => $request->description,
+                'allowed_type' => $request->allowed_type
             ]);
-            return $this->show($id);
-        } catch (ValidationException $exception) {
-            return response([
-                'errors'=>$exception->validator->errors()->all()
-            ]);
+            return new CollectionResource(Collection::find($id));
+        }catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        }catch (Exception $exception) {
+            return $this->respondNotFound();
         }
     }
 
@@ -107,13 +117,9 @@ class CollectionController extends Controller
             app(DestroyCollection::class)->execute([
                 'id' => $id
             ]);
-            return response([
-                'successful' => true
-            ]);
-        } catch (ValidationException $exception) {
-            return response([
-                'errors'=>$exception->validator->errors()->all()
-            ]);
+            return $this->respondObjectDeleted($id);
+        }catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
         }
     }
 }

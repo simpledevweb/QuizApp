@@ -2,6 +2,8 @@
 
 namespace App\Services\Collection;
 
+use App\Models\A;
+use App\Models\Category;
 use App\Models\Collection;
 use App\Services\BasicService;
 
@@ -11,8 +13,7 @@ class UpdateCollection extends BasicService
     {
         return [
             'id'=>'required|exists:collections,id',
-            'category_id'=>'required|exists:categories,id',
-            'user_id'=>'required|exists:users,id',
+            'category'=>'required|exists:categorie,name',
             'name'=>'required',
             'description'=>'required',
             'allowed_type'=>'required_with:public,limited users,url',
@@ -23,8 +24,7 @@ class UpdateCollection extends BasicService
     {
         $this->validate($data);
         Collection::find($data['id'])->update([
-            'category_id'=>$data['category_id'],
-            'user_id'=>$data['user_id'],
+            'category_id'=>A::where('name',$data['category'])->first()->id,
             'name'=>$data['name'],
             'description'=>$data['description'],
             'allowed_type'=>$data['allowed_type']
