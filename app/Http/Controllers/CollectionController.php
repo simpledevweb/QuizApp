@@ -17,6 +17,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\ValidationException;
 
 class CollectionController extends Controller
@@ -63,7 +64,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id):JsonResponse|JsonResource
     {
         try {
             [$collection, $questions] = app(ShowCollection::class)->execute([
@@ -84,7 +85,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id):JsonResponse|JsonResource
     {
         try {
             app(UpdateCollection::class)->execute([
@@ -108,7 +109,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id):JsonResponse
     {
         try {
             app(DestroyCollection::class)->execute([
