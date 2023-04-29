@@ -34,9 +34,8 @@ class CollectionController extends Controller
             return new CollectionCollection($collections);
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
-        } catch (Exception $exception) {
-            $code = is_string($exception->getCode()) ? 500 : $exception->getCode();
-            return $this->respondError($exception->getMessage(), [], $code);
+        }catch (Exception $exception) {
+            return $this->respondNotFound();
         }
     }
 
@@ -54,8 +53,7 @@ class CollectionController extends Controller
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         }catch (Exception $exception) {
-            $code = is_string($exception->getCode()) ? 500 : $exception->getCode();
-            return $this->respondError($exception->getMessage(), [], $code);
+            return $this->respondNotFound();
         }
     }
 
@@ -75,8 +73,7 @@ class CollectionController extends Controller
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         } catch (Exception $exception) {
-            $code = is_string($exception->getCode()) ? 500 : $exception->getCode();
-            return $this->respondError($exception->getMessage(), [], $code);
+            return $this->respondNotFound();
         }
     }
 
@@ -120,6 +117,8 @@ class CollectionController extends Controller
             return $this->respondObjectDeleted($id);
         }catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
+        }catch (Exception $exception) {
+            return $this->respondNotFound();
         }
     }
 }
