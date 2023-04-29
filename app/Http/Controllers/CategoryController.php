@@ -8,17 +8,21 @@ use App\Services\Category\IndexCategory;
 use App\Services\Category\ShowCategory;
 use App\Services\Category\StoreCategory;
 use App\Services\Category\UpdateCategory;
+use App\Traits\JsonRespondController;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
+    use JsonRespondController;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): JsonResource
     {
         $categories = app(IndexCategory::class)->execute([]);
         return CategoryResource::collection($categories);
@@ -38,13 +42,13 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResource|JsonResponse
     {
         try {
             $category = app(StoreCategory::class)->execute($request->all());
             return new CategoryResource($category);
         } catch (ValidationException $exception) {
-            return $exception->validator->errors()->all();
+            return $this->respondValidatorFailed($exception->validator);
         }
     }
 
@@ -54,17 +58,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): JsonResource|JsonResponse
     {
         try {
             $category = app(ShowCategory::class)->execute([
                 'id' => $id
             ]);
             return new CategoryResource($category);
-        }catch (ValidationException $exception) {
-            return response([
-                'errors' => $exception->validator->errors()->all(),
-            ], 422);
+        } catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
         }
     }
 
@@ -82,7 +84,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResource|JsonResponse
     {
         try {
             app(UpdateCategory::class)->execute([
@@ -90,10 +92,8 @@ class CategoryController extends Controller
                 'id' => $id
             ]);
             return $this->show($id);
-        } catch (ValidationException $exception) {
-            return response([
-                'errors' => $exception->validator->errors()->all(),
-            ], 422);
+        }catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
         }
     }
 
@@ -103,18 +103,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {   try {
-        app(DestroyCategory::class)->execute([
-            'id' => $id
-        ]);
-        return response([
-            'successful'=>true
-        ]);
-    } catch (ValidationException $exception) {
-        return response([
-            'errors' => $exception->validator->errors()->all(),
-        ], 422);
-    }
+    public function destroy($id): JsonResource|JsonResponse
+    {
+        try {
+            app(DestroyCategory::class)->execute([
+                'id' => $id
+            ]);
+          return $this->respondObjectDeleted($id);
+        } catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        }
     }
 }
