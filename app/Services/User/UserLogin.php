@@ -21,7 +21,7 @@ class UserLogin extends BasicService
         $this->validate($data);
         $user=User::where('phone',$data['phone'])->first();
         if(!$user or !Hash::check($data['password'], $user->password)){
-            throw new \Exception("User not found or password incorrect", 401);
+            throw new Exception("User not found or password incorrect", 401);
         }
         $role=$user->is_admin?'admin':'user';
         $token=$user->createToken('user model',[$role])->plainTextToken;

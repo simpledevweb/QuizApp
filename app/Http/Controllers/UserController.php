@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\VerifiCode;
 use App\Services\User\UserLogin;
 use App\Services\User\VerificationPremium\UserSendCode;
 use App\Services\User\UserRegister;
 use App\Services\User\VerificationPremium\UserVerifi;
 use App\Traits\JsonRespondController;
-use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +66,7 @@ class UserController extends Controller
             return response([
                 'error' => $exception->validator->errors()->all()
             ], 422);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             if ($exception->getCode() == 401) {
                 return response([
                     'error' => $exception->getMessage()
