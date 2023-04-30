@@ -10,6 +10,9 @@ Route::post('/singin',[UserController::class,'singIn']);
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->get('/user/getme',[UserController::class,'show']);
 
+Route::middleware('auth:sanctum')->post('/sendcode',[UserController::class,'sendcode']);
+Route::middleware('auth:sanctum')->post('/verificode',[UserController::class,'verificode']);
+
 Route::prefix('/category')
     ->group(function () {
         Route::get('/showall', [CategoryController::class, 'index']);
