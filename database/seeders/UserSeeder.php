@@ -20,7 +20,9 @@ class UserSeeder extends Seeder
             [
                 'name'=>'Alpamis Ibraymov',
                 'phone'=>'+998913795859',
+                'email'=>'alpamissimpledev@gmail.com',
                 'password'=>Hash::make(1904),
+                'hasemailverified'=>false,
                 'is_premium'=>true,
                 'is_admin'=>true,
                 'created_at'=> now(),
@@ -29,7 +31,9 @@ class UserSeeder extends Seeder
             [
                 'name'=>'Jangabaev Raxat',
                 'phone'=>'+998913882909',
+                'email'=>'alpamissimpledev@gmail.com',
                 'password'=>Hash::make(1111),
+                'hasemailverified'=>false,
                 'is_premium'=>false,
                 'is_admin'=>true,
                 'created_at'=> now(),
@@ -38,7 +42,9 @@ class UserSeeder extends Seeder
             [
                 'name'=>'Qutilmuratov Alisher',
                 'phone'=>'+998911234567',
+                'email'=>'alpamissimpledev@gmail.com',
                 'password'=>Hash::make(2222),
+                'hasemailverified'=>false,
                 'is_premium'=>true,
                 'is_admin'=>false,
                 'created_at'=> now(),
@@ -47,7 +53,9 @@ class UserSeeder extends Seeder
             [
                 'name'=>'Jusipov Asadbek',
                 'phone'=>'+998911111111',
+                'email'=>'alpamissimpledev@gmail.com',
                 'password'=>Hash::make(1234),
+                'hasemailverified'=>false,
                 'is_premium'=>false,
                 'is_admin'=>false,
                 'created_at'=> now(),

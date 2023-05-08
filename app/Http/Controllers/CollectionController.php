@@ -13,8 +13,6 @@ use App\Services\Collection\UpdateCollection;
 use App\Services\Collection\DestroyCollection;
 use App\Traits\JsonRespondController;
 use Exception;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -35,7 +33,7 @@ class CollectionController extends Controller
             return new CollectionCollection($collections);
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
-        }catch (Exception $exception) {
+        } catch (Exception $exception) {
             return $this->respondNotFound();
         }
     }
@@ -53,7 +51,7 @@ class CollectionController extends Controller
             return $this->respondSuccess();
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
-        }catch (Exception $exception) {
+        } catch (Exception $exception) {
             return $this->respondNotFound();
         }
     }
@@ -64,7 +62,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id):JsonResponse|JsonResource
+    public function show($id): JsonResponse|JsonResource
     {
         try {
             [$collection, $questions] = app(ShowCollection::class)->execute([
@@ -85,7 +83,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id):JsonResponse|JsonResource
+    public function update(Request $request, $id): JsonResponse|JsonResource
     {
         try {
             app(UpdateCollection::class)->execute([
@@ -96,9 +94,9 @@ class CollectionController extends Controller
                 'allowed_type' => $request->allowed_type
             ]);
             return new CollectionResource(Collection::find($id));
-        }catch (ValidationException $exception) {
+        } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
-        }catch (Exception $exception) {
+        } catch (Exception $exception) {
             return $this->respondNotFound();
         }
     }
@@ -109,16 +107,16 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id):JsonResponse
+    public function destroy($id): JsonResponse
     {
         try {
             app(DestroyCollection::class)->execute([
                 'id' => $id
             ]);
             return $this->respondObjectDeleted($id);
-        }catch (ValidationException $exception) {
+        } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
-        }catch (Exception $exception) {
+        } catch (Exception $exception) {
             return $this->respondNotFound();
         }
     }

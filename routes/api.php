@@ -1,9 +1,15 @@
 <?php
 
+use App\Http\Controllers\AllowedUserController;
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResultController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::post('/singup',[UserController::class,'register']);
 Route::post('/singin',[UserController::class,'singIn']);
@@ -38,3 +44,55 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/collection')
         Route::patch('/update/{id}',[CollectionController::class,'update']);
         Route::delete('/delete/{id}',[CollectionController::class,'destroy']);
     });
+
+Route::prefix('/question')
+->group(function () {
+    Route::get('/showall', [QuestionController::class, 'index']);
+    Route::get('/show/{id}', [QuestionController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/question')
+->group(function () {
+    Route::post('/add', [QuestionController::class, 'store']);
+    Route::delete('/delete/{id}', [QuestionController::class, 'destroy']);
+    Route::patch('/update/{id}', [QuestionController::class, 'update']);
+});
+
+Route::prefix('/allowed')
+->group(function () {
+Route::get('/show/{id}',[AllowedUserController::class, 'show']);
+Route::get('/all',[AllowedUserController::class, 'index']);
+});
+
+Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/allowed')
+->group(function () {
+    Route::post('/add', [AllowedUserController::class, 'store']);
+    Route::delete('/delete/{id}', [AllowedUserController::class, 'destroy']);
+    Route::put('/update/{id}', [AllowedUserController::class, 'update']);
+});
+
+Route::prefix('/answer')
+->group(function () {
+Route::get('/show/{id}',[AnswerController::class, 'show']);
+Route::get('/all',[AnswerController::class, 'index']);
+});
+
+Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/answer')
+->group(function () {
+    Route::post('/add', [AnswerController::class, 'store']);
+    Route::delete('/delete/{id}', [AnswerController::class, 'destroy']);
+    Route::put('/update/{id}', [AnswerController::class, 'update']);
+});
+
+Route::prefix('/result')
+->group(function () {
+Route::get('/show/{id}',[ResultController::class, 'show']);
+Route::get('/all',[ResultController::class, 'index']);
+});
+
+Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/result')
+->group(function () {
+    Route::post('/add', [ResultController::class, 'store']);
+    // Route::delete('/delete/{id}', [ResultController::class, 'destroy']);
+    // Route::put('/update/{id}', [ResultController::class, 'update']);
+});

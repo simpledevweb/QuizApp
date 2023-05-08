@@ -34,11 +34,15 @@ class Collection extends Model
             table: 'allowed_users',
         );
     }
-    public function questions():HasMany
+    public function questions(): HasMany
     {
-        return $this->hasMany(Question::class)->with('answers');
+        return $this->hasMany(Question::class);
     }
-  
+
+    public function results(): HasMany
+    {
+        return $this->hasMany(Result::class);
+    }
 
     public function scopeSearch(Builder $builder, $search)
     {

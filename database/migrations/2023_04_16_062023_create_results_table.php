@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreign('answer_id')->references('id')->on('answers');
             $table->boolean('is_correct');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

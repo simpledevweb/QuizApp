@@ -82,9 +82,9 @@ class UserController extends Controller
 
     public function verificode(Request $request)
     {
-        try{    
+        try {
             return app(UserVerifi::class)->execute($request->all());
-        }catch(ValidationException $exception){
+        } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         }
     }

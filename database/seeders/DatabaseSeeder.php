@@ -26,6 +26,9 @@ class DatabaseSeeder extends Seeder
                 CategorySeeder::class,
                 CollectionSeeder::class,
                 QuestionSeeder::class,
+                AnswerSeeder::class,
+                AllowedUserSeeder::class,
+                ResultSeeder::class,
             ]
         );
     }

@@ -4,6 +4,7 @@ namespace App\Services\Collection;
 use App\Models\Collection;
 use App\Models\Question;
 use App\Services\BasicService;
+use App\Services\Question\StoreQuestion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -37,23 +38,27 @@ class StoreCollection extends BasicService
             'code' => Str::random(30),
             'allowed_type' => $data['allowed_type'],
         ]);
-        foreach ($data['questions'] as $question) {
-            $answers = collect($question['answers']);
-            $question = Question::create([
-                'collection_id' => $collection->id,
-                'question' => $question['question'],
-                'correct_answers' => $answers->where('is_correct', true)->count(),
-            ]);
-            foreach ($answers as $answer){
-                $this->answers[] = [
-                    'question_id'=> $question->id,
-                    'answer'=> $answer['answer'],
-                    'is_correct'=> $answer['is_correct'],
-                ];
+        if($data['questions']!=null){
+            foreach($data['questions'] as $question){
+                app(StoreQuestion::class)->execute([
+                    'question'=>$question['question'],
+                    'answers'=>$question['answers'],
+                    'collection_id'=>$collection->id
+                ]);
             }
-            DB::table('answers')->insert($this->answers);
-            $this->answers = [];
         }
+        if($data['allowed_users']!=null){
+            $users=[];
+            foreach($data['allowed_users'] as $user){
+            $users[]=[
+                'user_id'=>$user,
+                'collection_id'=>$collection->id
+            ];
+            }
+            DB::table('allowed_users')->insert($users);
+        }
+
+
         return true;
     }
 }
