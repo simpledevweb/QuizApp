@@ -1,0 +1,67 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Traits\JsonRespondController;
+use Exception;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\JsonResponse;
+
+class {{ class }} extends Controller
+{
+    
+    use JsonRespondController;
+
+    public function index(Request $request): JsonResource|JsonResponse
+    {
+        try {
+        } catch (Exception $exception) {
+            return $this->respondNotFound();
+        }
+    }
+
+    public function store(Request $request): JsonResource|JsonResponse
+    {
+        try {
+        } catch (ValidationException $exceptoin) {
+            return $this->respondValidatorFailed($exceptoin->validator);
+        } catch (Exception $exceptoin) {
+            return $this->respondNotFound();
+        }
+    }
+
+    public function show($id):JsonResponse|JsonResource
+    {
+        try {
+        } catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        } catch (Exception $exception) {
+            return $this->respondNotFound();
+        }
+    }
+
+    public function update(Request $request, $id):JsonResource|JsonResponse
+    {
+        try {
+        } catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        } catch (Exception $exception) {
+            return $this->respondNotFound();
+        }
+    }
+
+    public function destroy($id):JsonResource|JsonResponse
+    {
+        try{
+           //Deleted row
+            return $this->respondObjectDeleted($id);
+        }catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        } catch (Exception $exception) {
+            return $this->respondNotFound();
+        }
+    }
+}

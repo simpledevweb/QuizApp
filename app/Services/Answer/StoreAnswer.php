@@ -26,12 +26,13 @@ class StoreAnswer  extends BasicService
             'is_correct' => $data['is_correct']
         ]);
         if ($data['is_correct']) {
-            $corrects = Question::find($data['question_id'])->first();
-            $corrects = $corrects['correct_answers'];
+            $question = Question::find($data['question_id']);
+            $corrects = $question->correct_answers;
             $corrects++;
-            Question::find($data['question_id'])->update([
+            $question->update([
                 'correct_answers' => $corrects
             ]);
+                
         }
         return true;
     }

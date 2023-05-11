@@ -92,7 +92,7 @@ class CategoryController extends Controller
                 'id' => $id
             ]);
             return $this->show($id);
-        }catch (ValidationException $exception) {
+        } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         }
     }
@@ -109,7 +109,7 @@ class CategoryController extends Controller
             app(DestroyCategory::class)->execute([
                 'id' => $id
             ]);
-          return $this->respondObjectDeleted($id);
+            return $this->respondObjectDeleted($id);
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         }

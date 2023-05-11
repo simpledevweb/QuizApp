@@ -20,7 +20,7 @@ class UpdateCategory extends BasicService
     public function execute(array $data)
     {
         $this->validate($data);
-        Category::find($data['id'])->update([
+        Category::where('id',$data['id'])->update([
             'name'=>$data['name']
         ]);
         return true;
