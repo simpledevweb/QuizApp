@@ -28,6 +28,7 @@ class UserRegister extends BasicService
             'is_admin'=>false 
         ]);
         $token=$user->createToken('user model', ['user'])->plainTextToken;
+        $user->sendEmailVerificationNotification();
         return [$user,$token]; 
     }
 }

@@ -16,6 +16,8 @@ Route::post('/singin',[UserController::class,'singIn']);
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->get('/user/getme',[UserController::class,'show']);
 
+Route::middleware('auth:sanctum')->get('/verifi_email/{id}/{hash}',[UserController::class,'verifiemail'])->name('verification.verify');;
+
 Route::middleware('auth:sanctum')->post('/sendcode',[UserController::class,'sendcode']);
 Route::middleware('auth:sanctum')->post('/verificode',[UserController::class,'verificode']);
 
@@ -71,11 +73,6 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/allowed')
     Route::put('/update/{id}', [AllowedUserController::class, 'update']);
 });
 
-Route::prefix('/answer')
-->group(function () {
-Route::get('/show/{id}',[AnswerController::class, 'show']);
-Route::get('/all',[AnswerController::class, 'index']);
-});
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/answer')
 ->group(function () {
@@ -86,13 +83,11 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/answer')
 
 Route::prefix('/result')
 ->group(function () {
-Route::get('/show/{id}',[ResultController::class, 'show']);
+Route::get('/calc',[ResultController::class, 'calculate']);
 Route::get('/all',[ResultController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/result')
 ->group(function () {
     Route::post('/add', [ResultController::class, 'store']);
-    // Route::delete('/delete/{id}', [ResultController::class, 'destroy']);
-    // Route::put('/update/{id}', [ResultController::class, 'update']);
 });

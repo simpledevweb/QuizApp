@@ -39,14 +39,11 @@ class StoreCollection extends BasicService
             'allowed_type' => $data['allowed_type'],
         ]);
         if($data['questions']!=null){
-            foreach($data['questions'] as $question){
                 app(StoreQuestion::class)->execute([
-                    'question'=>$question['question'],
-                    'answers'=>$question['answers'],
+                    'questions'=>$data['questions'],
                     'collection_id'=>$collection->id
                 ]);
             }
-        }
         if($data['allowed_users']!=null){
             $users=[];
             foreach($data['allowed_users'] as $user){

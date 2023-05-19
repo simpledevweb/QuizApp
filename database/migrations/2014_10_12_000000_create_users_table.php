@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone',13)->unique();
             $table->string('email')->nullable()->unique();
             $table->string('password');
-            $table->boolean('hasemailverified')->default(false);
+            $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_premium')->default(false);
             $table->boolean('is_admin')->default(false);
             $table->timestamps();

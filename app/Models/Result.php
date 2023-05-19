@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,5 +43,9 @@ class Result extends Model
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
+    }
+    public function scopeSearch(Builder $builder, $search)
+    {
+        $builder->where('name', 'like', "%{$search}%");
     }
 }

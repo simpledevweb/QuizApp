@@ -13,21 +13,27 @@ class StoreQuestion extends BasicService
     public function rules(): array
     {
         return [
-            "collection_id" => 'required|exists:collections,id',
-            "question" => "required",
-            "answers" => "required",
-            "answers.*.answer" => "required",
-            "answers.*.is_correct" => "required|boolean",
+            // "collection_id" => 'required|exists:collections,id',
+            // "question" => "required",
+            // "answers" => "required",
+            // "answers.*.answer" => "required",
+            // "answers.*.is_correct" => "required|boolean",
+            "questions" => "required|array",
+            "questions.*.question" => "required",
+            "questions.*.answers" => "required",
+            "questions.*.answers.*.answer" => "required",
+            "questions.*.answers.*.is_correct" => "required",
         ];
     }
 
     public function execute(array $data)
     {
         $this->validate($data);
-            $answers = collect($data['answers']);
+        foreach($data['questions'] as $questions){
+            $answers = collect($questions['answers']);
             $question = Question::create([
                 'collection_id' => $data['collection_id'],
-                'question' => $data['question'],
+                'question' => $questions['question'],
                 'correct_answers' => $answers->where('is_correct', true)->count(),
             ]);
             foreach ($answers as $answer) {
@@ -39,6 +45,7 @@ class StoreQuestion extends BasicService
             }
             DB::table('answers')->insert($this->answers);
             $this->answers = [];
+        }
         return true;
     }
 }

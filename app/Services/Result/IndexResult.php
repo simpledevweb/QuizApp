@@ -8,12 +8,16 @@ class IndexResult  extends BasicService
 {
     public function rules(): array
     {
-        return [];
+        return [
+            'search'=>'nullable'
+        ];
     }
 
-    public function execute()
+    public function execute($data)
     {
-        return Result::all();
+        return Result::when($data['search'] ?? null, function($query,$search){
+            $query->search($search);
+        })->paginate(15);
     }
 }
 

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Result\ResultAllResource;
-use App\Http\Resources\Result\ResultResource;
+use App\Http\Resources\Result\ResultCollection;
 use App\Services\Result\IndexResult;
-use App\Services\Result\ShowResult;
 use App\Services\Result\StoreResult;
 use App\Traits\JsonRespondController;
 use Exception;
@@ -13,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\ValidationException;
+use App\Services\Result\CalculateResult;
 
 class ResultController extends Controller
 {
@@ -22,11 +21,11 @@ class ResultController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): JsonResource|JsonResponse
+    public function index(Request $request): JsonResource|JsonResponse
     {
         try {
-            $results = app(IndexResult::class)->execute();
-            return ResultResource::collection($results);
+            $results = app(IndexResult::class)->execute($request);
+            return new ResultCollection($results);
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         } catch (Exception $exception) {
@@ -51,57 +50,10 @@ class ResultController extends Controller
             return $this->respondNotFound();
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id): JsonResource|JsonResponse
+    public function calculate()
     {
         try {
-            $result=app(ShowResult::class)->execute([
-                'id'=>$id
-            ]);
-            return new ResultAllResource($result);
-        } catch (ValidationException $exception) {
-            return $this->respondValidatorFailed($exception->validator);
-        } catch (Exception $exception) {
-            return $this->respondNotFound();
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id): JsonResource|JsonResponse
-    {
-        try {
-            // $collections = app(IndexCollection::class)->execute($request->all());
-            // return new CollectionCollection($collections);
-        } catch (ValidationException $exception) {
-            return $this->respondValidatorFailed($exception->validator);
-        } catch (Exception $exception) {
-            return $this->respondNotFound();
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id): JsonResponse
-    {
-        try {
-            // app(IndexCollection::class)->execute($request->all());
-            // return $this->respondObjectDeleted($id);
+            return app(CalculateResult::class)->execute();
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         } catch (Exception $exception) {

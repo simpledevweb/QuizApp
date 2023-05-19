@@ -16,6 +16,11 @@ class UserSendCode extends BasicService
     {
         $id = Auth::id();
         $user=User::where('id',$id)->first();
+        if(!$user->hasVerifiedEmail()){
+            return response([
+                'message' => 'You must be verifi email',
+            ]);
+        }else{
         if($user->is_premium){
             // eger premium bolsa
             return response([
@@ -44,5 +49,6 @@ class UserSendCode extends BasicService
                 'success' => 'The code has been sent to your email'
             ]);
         }
+    }
     }
 }

@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Services\User\UserLogin;
 use App\Services\User\VerificationPremium\UserSendCode;
 use App\Services\User\UserRegister;
 use App\Services\User\VerificationPremium\UserVerifi;
 use App\Traits\JsonRespondController;
 use Exception;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends Controller
 {
@@ -87,5 +91,17 @@ class UserController extends Controller
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         }
+    }
+
+    public function verifiemail(EmailVerificationRequest $request):User|Response|Null
+    {
+        if($request->user()->hasVerifiedEmail())
+        {
+            return response([
+                'message'=>'User email already verified'
+            ]);
+        }
+        $request->fulfill();
+        return Auth::user();
     }
 }

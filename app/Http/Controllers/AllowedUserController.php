@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Allowed_user\AllowedResource;
-use App\Http\Resources\Allowed_user\AllowedWithCollectionResource;
 use App\Models\AllowedUser;
 use App\Services\Allowed_user\IndexAllowed;
 use App\Services\Allowed_user\ShowAllowed;
@@ -67,7 +66,7 @@ class AllowedUserController extends Controller
             $allowed = app(ShowAllowed::class)->execute([
                 'id' => $id
             ]);
-            return new AllowedWithCollectionResource($allowed);
+            return new AllowedResource($allowed);
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         } catch (Exception $exception) {
