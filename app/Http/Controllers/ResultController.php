@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Result\ResultCollection;
+use App\Models\Collection;
+use App\Models\Question;
+use App\Models\Result;
+use App\Models\User;
+use App\Services\Result\CalculateCollectionResult;
+use App\Services\Result\CalculateQuestionResult;
 use App\Services\Result\IndexResult;
 use App\Services\Result\StoreResult;
 use App\Traits\JsonRespondController;
@@ -54,6 +60,28 @@ class ResultController extends Controller
     {
         try {
             return app(CalculateResult::class)->execute();
+        } catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        } catch (Exception $exception) {
+            return $this->respondNotFound();
+        }
+    }
+
+    public function calculateQuestion()
+    {
+        try {
+            return app(CalculateQuestionResult::class)->execute();
+        } catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+        } catch (Exception $exception) {
+            return $this->respondNotFound();
+        }
+    }
+
+    public function calculateCollection()
+    {
+        try {
+            return app(CalculateCollectionResult::class)->execute();
         } catch (ValidationException $exception) {
             return $this->respondValidatorFailed($exception->validator);
         } catch (Exception $exception) {
